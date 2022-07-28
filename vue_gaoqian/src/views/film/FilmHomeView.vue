@@ -10,6 +10,7 @@
           </v-tabs>
           <!-- 登录按钮 -->
           <v-btn absolute right top text class="mr-16" >登录</v-btn>
+          <login-register-dialog></login-register-dialog>
         </v-container>
     </v-app-bar>
     <v-main>
@@ -24,9 +25,11 @@
 </template>
 
 <script>
+  import LoginRegisterDialog from '../../components/LoginRegisterDialog.vue'
 
   export default {
     name: 'FilmHomeView',
+    components: {LoginRegisterDialog},
     data: () => ({     
       tabMenus: [],  //应用栏菜单
       footerLinks: [],  //页脚链接
