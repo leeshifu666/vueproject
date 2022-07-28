@@ -1,17 +1,8 @@
 <template>
   <v-app>
-    <!-- 应用栏区域 -->
-    <v-app-bar app color="#ffffff">
-      <!-- 应用栏容器 -->
-        <v-container fluid>          
-        <!-- 应用栏菜单选项 -->
-          <v-tabs centered slider-size="5">
-            <v-tab v-for="tab in tabMenus" :key="tab.id" :to="tab.href">{{tab.name}}</v-tab>
-          </v-tabs>
-          <!-- 登录按钮 -->
-          <v-btn absolute right top text class="mr-16" >登录</v-btn>
-          <login-register-dialog></login-register-dialog>
-        </v-container>
+    <v-app-bar app color="white">
+      <!-- 使用 HeadBar 组件 -->
+      <head-bar></head-bar>
     </v-app-bar>
     <v-main>
       <v-container fluid class="d-flex justify-center">
@@ -75,12 +66,10 @@
           </v-card>         
         </v-card>
       </v-container>
-    </v-main>    
-    <!-- 页脚区域 -->
+    </v-main>
     <v-footer class="text-center">
-      <v-container>
-        <v-chip small label color="transparent" v-for="link in footerLinks" :to="link.to" :key="link.id">{{link.text}}</v-chip>
-      </v-container>
+      <!-- 使用 FooterBar 组件 -->
+      <footer-bar></footer-bar>
     </v-footer>
   </v-app>
 </template>
@@ -93,9 +82,7 @@
     name: 'SchoolHomeView',
     components: {SchoolVideoCardH},
     components: {LoginRegisterDialog},
-    data: () => ({     
-      tabMenus: [],  //应用栏菜单
-      footerLinks: [],  //页脚链接
+    data: () => ({
       subMenus: [],  //课程菜单
       subValue: null,  //课程菜单值
       targetValue: null,  //目标制片值
@@ -115,32 +102,6 @@
       }
     },
     methods: {
-      //获取应用栏菜单
-      getAppBarMenus (){
-        //请求服务器 -- 获取 --应用栏菜单
-        this.tabMenus = [
-          {id: 1, name: '首页', href: '/'},
-          {id: 2, name: '博客', href: '/blog'},
-          {id: 3, name: '考证', href: '/exam'},
-          {id: 4, name: '影音', href: '/film'},
-          {id: 5, name: '学堂', href: '/school'},
-        ]
-      },
-      //获取页脚信息
-      getFooterLinks() {
-        //请求服务器 -- 获取页脚链接
-        this.footerLinks = [
-          {id: 1, text: '增值电信业务经营许可证： 合字B2-2009007', to: ''},
-          {id: 2, text: '京ICP备10036305号-7', to: ''},
-          {id: 3, text: '京公安网备11010802022657', to: ''},
-          {id: 4, text: '隐私声明和 Cookie', to: ''},
-          {id: 5, text: '法律声明', to: ''},
-          {id: 6, text: '广告', to: ''},
-          {id: 7, text: '帮助', to: ''},
-          {id: 8, text: '反馈', to: ''},
-          {id: 9, text: '© 2022 Microsoft', to: ''},
-        ]
-      },
       //获取课程菜单
       getSubjectMenus(){
         //请求服务器 -- 获取课程菜单
@@ -2272,11 +2233,7 @@ this.videoList = null
         }
       }
     },
-    created() {     
-        //获取应用栏菜单
-        this.getAppBarMenus()
-        //获取页脚链接
-        this.getFooterLinks()
+    created() {
         //获取课程菜单
         this.getSubjectMenus()
     }
