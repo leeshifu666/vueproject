@@ -40,6 +40,7 @@
                 </v-card>
                 <!-- 窗口（登录， 注册， 注册成功） -->
                 <v-window v-model="step">
+                    <!-- 登录页面 -->
                     <v-window-item :value="1">
                         <v-card tile class="pa-16 d-flex flex-column" width="500" height="573">
                             <!-- 标题 -->
@@ -122,11 +123,13 @@
                             </v-container>
                         </v-card>
                     </v-window-item>
+                    <!-- 注册页面 -->
                     <v-window-item :value="2">
                         <v-card tile width="500" height="573">
                             注册
                         </v-card>
                     </v-window-item>
+                    <!-- 注册成功页面 -->
                     <v-window-item :value="3">
                         <v-card tile width="500" height="573">
                             注册成功
