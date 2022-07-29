@@ -47,16 +47,22 @@
                                 <h2>登录</h2>
                                 <span class="text-caption ml-auto">
                                     没有账号？
-                                    <a href="#">点击注册</a>
+                                    <a href="#" class="text-decoration-none" @click="step = 2">点击注册</a>
                                 </span>
                             </v-container>
                             <!-- 登录区域 -->
                             <v-container>
-                                <!-- 账号文本框 -->
+                                <!-- 登录表单 -->
+                              <v-from
+                                v-model="login.value" 
+                                ref="login-from"
+                                lazy-validation>
+                                  <!-- 账号文本框 -->
                                 <v-text-field
                                     outlined    
                                     dense
-                                    v-model="login.account"
+                                    :rules="login.account.rule"
+                                    v-model="login.account.value"
                                     label="账号/邮箱/手机号"
                                     placeholder="账号/邮箱/手机号"
                                 ></v-text-field>
@@ -64,6 +70,7 @@
                                 <v-text-field
                                     outlined
                                     dense
+                                    :rules="login.password.rule"
                                     v-model="login.password.value"
                                     :append-icon="login.password.icon"
                                     @click:append="eyePassword"
@@ -71,9 +78,48 @@
                                     label="密码"
                                     placeholder="请输入密码"
                                 ></v-text-field>
+                                <!-- 条款与协议 -->
+                                <v-checkbox 
+                                 dense 
+                                 class="mt-0 mb-2"
+                                 :rules="login.term.rule"
+                                 label="同意本公司的条款与协议" 
+                                 v-model="login.term.value"
+                                 >
+                                 <!-- 使用便签插槽 -->
+                                    <template #label>
+                                        同意本公司的<a class="text-decoration-none" href="#" @click.stop>条款与协议</a>   
+                                    </template>
+                                 </v-checkbox>
+                                <!-- 登录按钮 -->
+                                <v-btn block :disabled="!login.value" color="success">登录</v-btn>
+                              </v-from>
+                                <!-- 忘记密码 -->
+                                <v-container class="text-center">
+                                    <a class="text-caption grey--text text-decoration-none" href="#">忘记密码</a>
+                                </v-container>
                             </v-container>
                             <!-- 其他登录方式 -->
-                            <v-container class="mt-auto">3</v-container>
+                            <v-container class="mt-auto">
+                                <!-- 分隔符 -->
+                                <v-container class="d-flex align-center py-0">
+                                    <v-divider></v-divider>
+                                    <v-subheader class="text-caption">其他的登录方式</v-subheader>
+                                    <v-divider></v-divider>
+                                </v-container>
+                                <!-- 图标 -->
+                                <v-container class="text-center py-0">
+                                    <v-btn
+                                    small 
+                                    fab 
+                                    v-for="(item, index) in login.otherMethods" 
+                                    :key="item.id" :color="item.color" 
+                                    :to="item.to"
+                                    :class="{'ml-9': (index !== 0)}">
+                                        <v-icon>{{item.icon}}</v-icon>
+                                    </v-btn>
+                                </v-container>
+                            </v-container>
                         </v-card>
                     </v-window-item>
                     <v-window-item :value="2">
@@ -97,19 +143,58 @@
         name: "LoginRegisterDialog",
         data: () => ({
             show: true,  //显示隐藏对话框
-            step: 1,  //窗口显示
+            step: 2,  //窗口显示
             recAuthor: {},  //推荐博主
             footerLinks: [],  //脚部链接
             login: {
-                account: '',
+                value: true,  //表单状态
+                //  账号
+                account: {
+                    value: '', // 账号
+                    rule: [
+                        v => !!v || '请填写你的账号！',  //账号为空时提示
+                    ]
+                },  
+                //  密码
                 password: {
-                    icon: 'mdi-eye',
-                    value: '',
-                    type: 'password'
-                }
+                    icon: 'mdi-eye',  //  查看密码图标
+                    value: '',  //  密码值
+                    type: 'password',  //  输入框的类型
+                    rule: [
+                        v => !!v || '请填写你的密码！',  //密码为空时提示
+                    ]
+                },
+                //  条款
+                term: {
+                    value: false, //  是否勾选
+                    rule: [
+                        v => !!v || '请认真阅读条款与协议！',
+                    ]
+                },  
+                otherMethods: [], // 其他登录方式
             }
         }),
         methods: {
+            //获取其他登录方式
+            getOtherLoginMethods() {
+                //请求服务器 -- 获取其他登录方式
+                this.login.otherMethods = [
+                    {id: 1, name: 'QQ', icon: 'mdi-qqchat', color: 'info', to: ''},
+                    {id: 2, name: '微信', icon: 'mdi-wechat', color: 'success', to: ''},
+                    {id: 3, name: '微博', icon: 'mdi-sina-weibo', color: 'error', to: ''}
+                ]              
+            },
+            //去登陆
+            toLogin() {
+                // 手动验证表达的状态
+                let isSuccess = this.$refs.login-from.validate()
+                if (!isSuccess) {
+                    return
+                }else{                    
+                // 请求服务器 --登录
+                alert("验证成功，请求服务进行登录")
+                }
+            },
             //查看密码
             eyePassword() {
                 //需要查看密码
@@ -161,8 +246,11 @@
                 this.show = isShow
             })
 
-          // 获取脚部链接
+            // 获取脚部链接
             this.getFooterLinks()  
+
+            //  获取其他登录方式
+            this.getOtherLoginMethods()
         }
     }
 </script>
