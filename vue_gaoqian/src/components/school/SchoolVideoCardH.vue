@@ -27,7 +27,7 @@
             <!-- 学习 -->
             <v-list-item-action>
               <div>
-                <span class="text-caption grey--text text--lighten-1">{{studyCount}}人已学</span>
+                <span class="text-caption grey--text text--lighten-1">{{studyCount | numFormat}}人已学</span>
                 <br>
                 <v-btn block color="info" small class="rounded-pill">开始学习</v-btn>
               </div>
@@ -48,7 +48,14 @@
             time: {type: String, required: true},//发布时间
             desc: {type: String, required: true},//视频描述
             studyCount: {type: Number, required: true},//学习人数
-        }
+        },
+        //组件循环引用解决办法
+        // beforeCreate: function (){
+        //   this.$options.components.TreeFolderContents = require("路径").default
+        // }
+        // components: {
+        //   TreeFolderContents: () => import("路径")
+        // }
     }
 </script>
 

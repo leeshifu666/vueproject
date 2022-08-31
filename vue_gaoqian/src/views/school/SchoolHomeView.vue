@@ -75,7 +75,7 @@
 </template>
 
 <script>
-  import SchoolVideoCardH from "../../components/school/SchoolVideoCardH.vue"
+  import SchoolVideoCardH from "@/components/school/SchoolVideoCardH.vue"
   import LoginRegisterDialog from '../../components/LoginRegisterDialog.vue'
 
   export default {
@@ -2236,7 +2236,7 @@ this.videoList = null
     created() {
         //获取课程菜单
         this.getSubjectMenus()
-    }
+    },
   }
 </script>
 
